@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusAutomate | Soluciones de Automatización Empresarial AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #00f7ff;
+            --secondary: #6e00ff;
+            --dark: #0a0a1a;
+            --light: #f0f0f0;
+            --accent: #ff00aa;
+            --glass: rgba(255, 255, 255, 0.05);
+            --hologram-blue: rgba(0, 247, 255, 0.15);
+            --hologram-purple: rgba(110, 0, 255, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 25% 25%, var(--hologram-purple) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, var(--hologram-blue) 0%, transparent 50%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            padding: 30px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background-color: rgba(10, 10, 26, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            background-color: rgba(10, 10, 26, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+        
+        .logo:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            transition: transform 0.5s ease;
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 1.1rem;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--hologram-blue);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 247, 255, 0.4);
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 200px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--hologram-purple) 0%, transparent 70%),
+                radial-gradient(circle at 80% 70%, var(--hologram-blue) 0%, transparent 70%);
+            z-index: -2;
+            animation: pulse 15s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease 0.5s;
+        }
+        
+        .hero h1.animate::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+            color: rgba(240, 240, 240, 0.8);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.3s;
+        }
+        
+        .hero p.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.6s;
+        }
+        
+        .hero-buttons.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .secondary-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.1), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(0, 247, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.2);
+        }
+        
+        .secondary-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Holographic Floating Elements */
+        .holographic-element {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            z-index: -1;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .holographic-element.blue {
+            background: var(--primary);
+            width: 300px;
+            height: 300px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .holographic-element.purple {
+            background: var(--secondary);
+            width: 400px;
+            height: 400px;
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+        
+        .holographic-element.pink {
+            background: var(--accent);
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            right: 20%;
+            animation-delay: 6s;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+        
+        .section-header.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(240, 240, 240, 0.7);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+        
+        .feature-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--hologram-purple) 0%, transparent 70%);
+            z-index: -1;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.1);
+            border-color: rgba(0, 247, 255, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .feature-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .feature-card:hover h3::after {
+            width: 100%;
+        }
+        
+        .feature-card p {
+            color: rgba(240, 240, 240, 0.7);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .feature-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .feature-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .feature-link:hover {
+            gap: 10px;
+        }
+        
+        .feature-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Dashboard Preview */
+        .dashboard-preview {
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-container {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .dashboard-container.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dashboard-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--hologram-purple) 0%, transparent 50%),
+                linear-gradient(-90deg, var(--hologram-blue) 0%, transparent 50%);
+            z-index: -1;
+            animation: scan 8s linear infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes scan {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .dashboard-tab {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .dashboard-tab:hover::before {
+            left: 100%;
+        }
+        
+        .dashboard-tab.active {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .dashboard-actions i {
+            margin-left: 15px;
+            font-size: 1.2rem;
+            color: rgba(240, 240, 240, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-actions i:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            height: 500px;
+        }
+        
+        .sidebar {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-menu a {
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            padding: 8px 10px;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.1), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .sidebar-menu a:hover::before {
+            left: 100%;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(0, 247, 255, 0.1);
+            color: var(--primary);
+        }
+        
+        .sidebar-menu a i {
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover i {
+            transform: scale(1.2);
+        }
+        
+        .main-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto 1fr 1fr;
+            gap: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+        
+        .metric-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.1);
+        }
+        
+        .metric-card h4 {
+            font-size: 0.9rem;
+            color: rgba(240, 240, 240, 0.7);
+            margin-bottom: 10px;
+        }
+        
+        .metric-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            grid-column: span 2;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 48%, var(--hologram-blue) 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, var(--hologram-purple) 50%, transparent 52%);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .chart {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 3D Holographic Visualization */
+        .holographic-visualization {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .pricing-card {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+        
+        .pricing-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--hologram-purple) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, var(--hologram-blue) 0%, transparent 50%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .pricing-card:hover::before {
+            opacity: 0.5;
+        }
+        
+        .pricing-card.popular {
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.popular::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--primary));
+            z-index: -1;
+            animation: borderRotate 3s linear infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes borderRotate {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .pricing-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .pricing-card:hover h3::after {
+            width: 100%;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: rgba(240, 240, 240, 0.7);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(240, 240, 240, 0.8);
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .pricing-features li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            opacity: 0.7;
+        }
+        
+        .pricing-features li i {
+            color: var(--primary);
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .testimonial-card {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .testimonial-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.1);
+            border-color: rgba(0, 247, 255, 0.3);
+        }
+        
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover .testimonial-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.5);
+        }
+        
+        .testimonial-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .testimonial-info p {
+            color: rgba(240, 240, 240, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        .testimonial-text {
+            color: rgba(240, 240, 240, 0.8);
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .testimonial-text::before, .testimonial-text::after {
+            content: '"';
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+        }
+        
+        .testimonial-text::before {
+            top: -15px;
+            left: -10px;
+        }
+        
+        .testimonial-text::after {
+            bottom: -25px;
+            right: -10px;
+        }
+        
+        .testimonial-rating {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-container {
+            background: linear-gradient(135deg, var(--hologram-purple), var(--hologram-blue));
+            border-radius: 20px;
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s ease;
+        }
+        
+        .cta-container.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--hologram-purple) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, var(--hologram-blue) 0%, transparent 50%);
+            z-index: -1;
+            animation: pulse 10s infinite alternate;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: rgba(240, 240, 240, 0.8);
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 70px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 48%, var(--hologram-blue) 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, var(--hologram-purple) 50%, transparent 52%);
+            background-size: 30px 30px;
+            opacity: 0.05;
+            z-index: -1;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .footer-about p {
+            color: rgba(240, 240, 240, 0.6);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+            background: rgba(0, 247, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+        }
+        
+        .footer-links h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-links h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links h4:hover::after {
+            width: 100%;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(240, 240, 240, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+        
+        .footer-newsletter p {
+            color: rgba(240, 240, 240, 0.6);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .newsletter-form {
+            display: flex;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 30px 0 0 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-form input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+        
+        .newsletter-form button {
+            padding: 0 20px;
+            border-radius: 0 30px 30px 0;
+            border: none;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-form button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(240, 240, 240, 0.4);
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Particle Background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-content {
+                grid-template-columns: 200px 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dashboard-content {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                grid-column: span 1;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input {
+                border-radius: 30px;
+                margin-bottom: 10px;
+            }
+            
+            .newsletter-form button {
+                border-radius: 30px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Holographic Floating Elements -->
+    <div class="holographic-element blue"></div>
+    <div class="holographic-element purple"></div>
+    <div class="holographic-element pink"></div>
+    
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-robot logo-icon"></i>
+                <span>NexusAutomate</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#features">Soluciones</a></li>
+                    <li><a href="#dashboard">Plataforma</a></li>
+                    <li><a href="#pricing">Precios</a></li>
+                    <li><a href="#testimonials">Clientes</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
+            <a href="#pricing" class="cta-button">Comenzar Ahora</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 id="hero-title">Automatización Empresarial con IA</h1>
+            <p id="hero-subtitle">Potencia tu negocio con nuestros agentes autónomos de última generación. Desde marketing hasta operaciones, automatiza tus procesos y escala sin límites.</p>
+            <div class="hero-buttons" id="hero-buttons">
+                <a href="#features" class="cta-button">Ver Soluciones</a>
+                <a href="#dashboard" class="secondary-button">Ver Demo</a>
+            </div>
+        </div>
+        
+        <!-- 3D Holographic Visualization -->
+        <div class="holographic-visualization" id="hologram-canvas"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header" id="features-header">
+                <h2>Nuestros Agentes Especializados</h2>
+                <p>Soluciones de automatización listas para implementar en tu empresa hoy mismo</p>
+            </div>
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <i class="fas fa-calendar-check feature-icon"></i>
+                    <h3>Agente Appointment Setter (Instagram)</h3>
+                    <p>Automatiza la programación de citas directamente desde Instagram, convirtiendo seguidores en clientes potenciales las 24/7.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <i class="fas fa-user-tie feature-icon"></i>
+                    <h3>Asistente Personal para CEOs</h3>
+                    <p>Tu asistente ejecutivo virtual que gestiona correos, agenda reuniones y prioriza tareas críticas.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <i class="fas fa-id-card feature-icon"></i>
+                    <h3>Avatar de Marca Personal</h3>
+                    <p>Crea y gestiona un avatar digital que representa tu marca, interactuando con clientes en tu nombre.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <i class="fas fa-blog feature-icon"></i>
+                    <h3>Creador de Blog SEO Expert</h3>
+                    <p>Genera contenido optimizado para SEO que posiciona tu marca como autoridad en tu industria.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="feature-card">
+                    <i class="fas fa-envelope feature-icon"></i>
+                    <h3>Email Scrapper</h3>
+                    <p>Encuentra y clasifica leads potenciales con datos de contacto precisos para tus campañas.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="feature-card">
+                    <i class="fas fa-handshake feature-icon"></i>
+                    <h3>Agente Icebreaker</h3>
+                    <p>Inicia conversaciones con clientes potenciales de manera natural y efectiva.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 7 -->
+                <div class="feature-card">
+                    <i class="fas fa-store feature-icon"></i>
+                    <h3>Manager E-Commerce (Shopify)</h3>
+                    <p>Gestiona automáticamente tu tienda Shopify, desde inventario hasta servicio al cliente.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 8 -->
+                <div class="feature-card">
+                    <i class="fas fa-headset feature-icon"></i>
+                    <h3>Agente Secretario Virtual</h3>
+                    <p>Atiende llamadas, agenda citas y filtra solicitudes como un asistente humano.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 9 -->
+                <div class="feature-card">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h3>Extractor KPIs de Meta Ads</h3>
+                    <p>Monitorea y optimiza tus campañas publicitarias con análisis en tiempo real.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 10 -->
+                <div class="feature-card">
+                    <i class="fas fa-video feature-icon"></i>
+                    <h3>Generador de Guiones YouTube</h3>
+                    <p>Crea guiones atractivos y optimizados para tus videos que aumentan el engagement.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 11 -->
+                <div class="feature-card">
+                    <i class="fas fa-database feature-icon"></i>
+                    <h3>Indexador de datos RAG Avanzado</h3>
+                    <p>Organiza y estructura tus datos empresariales para un acceso y análisis eficientes.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Feature 12 -->
+                <div class="feature-card">
+                    <i class="fas fa-server feature-icon"></i>
+                    <h3>MCP Servers (Email, Calendar, Task, Shopify)</h3>
+                    <p>Infraestructura de automatización que integra todos tus sistemas empresariales.</p>
+                    <a href="#" class="feature-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Preview -->
+    <section class="dashboard-preview" id="dashboard">
+        <div class="container">
+            <div class="section-header" id="dashboard-header">
+                <h2>Plataforma de Gestión Unificada</h2>
+                <p>Controla todos tus agentes desde un único panel de control intuitivo y potente</p>
+            </div>
+            <div class="dashboard-container" id="dashboard-container">
+                <div class="dashboard-header">
+                    <div class="dashboard-tabs">
+                        <div class="dashboard-tab active">Visión General</div>
+                        <div class="dashboard-tab">Agentes</div>
+                        <div class="dashboard-tab">Analíticas</div>
+                        <div class="dashboard-tab">Configuración</div>
+                    </div>
+                    <div class="dashboard-actions">
+                        <i class="fas fa-bell"></i>
+                        <i class="fas fa-cog"></i>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="sidebar">
+                        <ul class="sidebar-menu">
+                            <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                            <li><a href="#"><i class="fas fa-robot"></i> Mis Agentes</a></li>
+                            <li><a href="#"><i class="fas fa-chart-pie"></i> Reportes</a></li>
+                            <li><a href="#"><i class="fas fa-envelope"></i> Comunicaciones</a></li>
+                            <li><a href="#"><i class="fas fa-tasks"></i> Tareas</a></li>
+                            <li><a href="#"><i class="fas fa-calendar-alt"></i> Calendario</a></li>
+                            <li><a href="#"><i class="fas fa-cog"></i> Configuración</a></li>
+                            <li><a href="#"><i class="fas fa-question-circle"></i> Soporte</a></li>
+                        </ul>
+                    </div>
+                    <div class="main-content">
+                        <div class="metric-card">
+                            <h4>Agentes Activos</h4>
+                            <div class="value">12</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Tareas Completadas (7d)</h4>
+                            <div class="value">1,248</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Leads Generados</h4>
+                            <div class="value">327</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>ROI Estimado</h4>
+                            <div class="value">37%</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="performanceChart" class="chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header" id="pricing-header">
+                <h2>Planes a Medida</h2>
+                <p>Elige el paquete que mejor se adapte a las necesidades de tu empresa</p>
+            </div>
+            <div class="pricing-grid">
+                <!-- Plan Básico -->
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$299<span>/mes</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 3 Agentes básicos</li>
+                        <li><i class="fas fa-check"></i> Soporte por email</li>
+                        <li><i class="fas fa-check"></i> 5,000 tareas/mes</li>
+                        <li><i class="fas fa-check"></i> Panel de control básico</li>
+                        <li><i class="fas fa-check"></i> 1 usuario</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="display: block; text-align: center;">Comenzar</a>
+                </div>
+                
+                <!-- Plan Profesional (Popular) -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge">MÁS POPULAR</div>
+                    <h3>Profesional</h3>
+                    <div class="price">$799<span>/mes</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 8 Agentes premium</li>
+                        <li><i class="fas fa-check"></i> Soporte prioritario 24/5</li>
+                        <li><i class="fas fa-check"></i> 20,000 tareas/mes</li>
+                        <li><i class="fas fa-check"></i> Panel avanzado</li>
+                        <li><i class="fas fa-check"></i> 3 usuarios</li>
+                        <li><i class="fas fa-check"></i> Integraciones API</li>
+                        <li><i class="fas fa-check"></i> Reportes personalizados</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="display: block; text-align: center;">Comenzar</a>
+                </div>
+                
+                <!-- Plan Empresarial -->
+                <div class="pricing-card">
+                    <h3>Empresarial</h3>
+                    <div class="price">$1,999<span>/mes</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Agentes ilimitados</li>
+                        <li><i class="fas fa-check"></i> Soporte 24/7 dedicado</li>
+                        <li><i class="fas fa-check"></i> Tareas ilimitadas</li>
+                        <li><i class="fas fa-check"></i> Panel empresarial</li>
+                        <li><i class="fas fa-check"></i> Usuarios ilimitados</li>
+                        <li><i class="fas fa-check"></i> Integraciones personalizadas</li>
+                        <li><i class="fas fa-check"></i> SLA 99.9% uptime</li>
+                        <li><i class="fas fa-check"></i> Entrenamiento personalizado</li>
+                        <li><i class="fas fa-check"></i> Desarrollo a medida</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="display: block; text-align: center;">Contactar Ventas</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header" id="testimonials-header">
+                <h2>Lo que dicen nuestros clientes</h2>
+                <p>Empresas que han transformado sus operaciones con nuestros agentes autónomos</p>
+            </div>
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Cliente" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4>María González</h4>
+                            <p>CEO, TechSolutions</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"El asistente personal para CEOs ha cambiado completamente mi forma de trabajar. Ahora puedo enfocarme en la estrategia mientras el agente maneja mi agenda y prioriza mis tareas. Increíble."</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Cliente" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4>Carlos Mendoza</h4>
+                            <p>CMO, DigitalAgency</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"El extractor de KPIs de Meta Ads nos ha ahorrado cientos de horas de análisis manual. Ahora podemos optimizar nuestras campañas en tiempo real con datos precisos."</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Cliente" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4>Ana Rodríguez</h4>
+                            <p>Directora de E-commerce</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"El manager de Shopify ha aumentado nuestras ventas un 30% al optimizar automáticamente nuestro inventario y precios. La integración fue perfecta y el ROI fue inmediato."</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <div class="cta-container" id="cta-container">
+                <h2>¿Listo para automatizar tu negocio?</h2>
+                <p>Programa una demostración personalizada y descubre cómo nuestros agentes pueden transformar tus operaciones empresariales.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="cta-button">Agendar Demo</a>
+                    <a href="#" class="secondary-button">Hablar con Ventas</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">NexusAutomate</div>
+                    <p>Líderes en automatización empresarial con inteligencia artificial. Potenciamos negocios con soluciones autónomas de última generación.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Soluciones</h4>
+                    <ul>
+                        <li><a href="#">Agentes de Marketing</a></li>
+                        <li><a href="#">Automatización de Ventas</a></li>
+                        <li><a href="#">Operaciones Automatizadas</a></li>
+                        <li><a href="#">Asistentes Virtuales</a></li>
+                        <li><a href="#">Analítica Avanzada</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                        <li><a href="#">Carreras</a></li>
+                        <li><a href="#">Casos de Estudio</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Newsletter</h4>
+                    <p>Suscríbete para recibir las últimas noticias sobre automatización e IA.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Tu email">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 NexusAutomate. Todos los derechos reservados. | <a href="#">Términos de Servicio</a> | <a href="#">Política de Privacidad</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Particle.js Script -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Dashboard tab functionality
+        const tabs = document.querySelectorAll('.dashboard-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+        
+        // Header scroll effect
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#00f7ff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#6e00ff",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": true,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.5
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+        
+        // Initialize Chart.js
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul'],
+                datasets: [
+                    {
+                        label: 'Tareas Completadas',
+                        data: [650, 590, 800, 810, 956, 1050, 1248],
+                        borderColor: '#00f7ff',
+                        backgroundColor: 'rgba(0, 247, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Leads Generados',
+                        data: [120, 180, 210, 240, 280, 310, 327],
+                        borderColor: '#6e00ff',
+                        backgroundColor: 'rgba(110, 0, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#f0f0f0',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(10, 10, 26, 0.9)',
+                        titleColor: '#00f7ff',
+                        bodyColor: '#f0f0f0',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(240, 240, 240, 0.7)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(240, 240, 240, 0.7)'
+                        }
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 4,
+                        hoverRadius: 6,
+                        backgroundColor: '#0a0a1a',
+                        borderWidth: 2
+                    }
+                }
+            }
+        });
+        
+        // 3D Hologram Visualization
+        const hologramCanvas = document.getElementById('hologram-canvas');
+        
+        // Only initialize if WebGL is supported
+        if (WebGLRenderingContext) {
+            // Scene setup
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+                alpha: true,
+                antialias: true
+            });
+            
+            renderer.setSize(hologramCanvas.offsetWidth, hologramCanvas.offsetHeight);
+            hologramCanvas.appendChild(renderer.domElement);
+            
+            // Create a holographic grid
+            const gridGeometry = new THREE.BufferGeometry();
+            const gridMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0x00f7ff,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+            
+            const grid = new THREE.Mesh(gridGeometry, gridMaterial);
+            scene.add(grid);
+            
+            // Create floating particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesMaterial = new THREE.PointsMaterial({
+                color: 0x6e00ff,
+                size: 0.1,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+            
+            // Position camera
+            camera.position.z = 5;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                grid.rotation.x += 0.001;
+                grid.rotation.y += 0.002;
+                
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = hologramCanvas.offsetWidth / hologramCanvas.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(hologramCanvas.offsetWidth, hologramCanvas.offsetHeight);
+            });
+        }
+        
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    
+                    // Special cases for elements that need staggered animations
+                    if (entry.target.id === 'features-header') {
+                        const featureCards = document.querySelectorAll('.feature-card');
+                        featureCards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('animate');
+                            }, index * 100);
+                        });
+                    }
+                    
+                    if (entry.target.id === 'dashboard-header') {
+                        document.getElementById('dashboard-container').classList.add('animate');
+                    }
+                    
+                    if (entry.target.id === 'pricing-header') {
+                        const pricingCards = document.querySelectorAll('.pricing-card');
+                        pricingCards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('animate');
+                            }, index * 200);
+                        });
+                    }
+                    
+                    if (entry.target.id === 'testimonials-header') {
+                        const testimonialCards = document.querySelectorAll('.testimonial-card');
+                        testimonialCards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('animate');
+                            }, index * 200);
+                        });
+                    }
+                    
+                    if (entry.target.id === 'cta-container') {
+                        entry.target.classList.add('animate');
+                    }
+                    
+                    if (entry.target.id === 'hero-title') {
+                        document.getElementById('hero-title').classList.add('animate');
+                        setTimeout(() => {
+                            document.getElementById('hero-subtitle').classList.add('animate');
+                        }, 300);
+                        setTimeout(() => {
+                            document.getElementById('hero-buttons').classList.add('animate');
+                        }, 600);
+                    }
+                }
+            });
+        }, { 
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        });
+        
+        // Observe all sections and elements that need animation
+        document.querySelectorAll('.section-header, #dashboard-container, #cta-container, #hero-title, #hero-subtitle, #hero-buttons').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
