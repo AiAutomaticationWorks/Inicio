@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar de Marca Personal - Kryptoryn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4e54c8;
+            --secondary-color: #8f94fb;
+            --dark-color: #1e1e2f;
+            --light-color: #f8f9fa;
+            --accent-color: #6a11cb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Contenido del agente */
+        .agent-details {
+            padding: 4rem 0;
+        }
+        
+        .agent-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .agent-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .agent-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .agent-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .agent-image {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .agent-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .agent-image img:hover {
+            transform: scale(1.03);
+        }
+        
+        .agent-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .features-section, .use-cases {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .features-section h2, .use-cases h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            background: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .use-cases ul {
+            list-style-position: inside;
+            padding-left: 1rem;
+        }
+        
+        .use-cases li {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .demo-video {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-video iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.3);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(78, 84, 200, 0.4);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #bbb;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .copyright {
+            border-top: 1px solid #444;
+            padding-top: 1.5rem;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .agent-content {
+                flex-direction: column;
+            }
+            
+            .demo-video iframe {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">Kryptoryn AI</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#services">Servicios</a></li>
+                    <li><a href="index.html#about">Nosotros</a></li>
+                    <li><a href="index.html#contact">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="agent-details">
+        <div class="container">
+            <div class="agent-header">
+                <h1>Avatar de Marca Personal</h1>
+                <p>Tu representación digital inteligente que interactúa con clientes y audiencias en tu nombre, manteniendo la esencia de tu marca personal las 24 horas del día.</p>
+            </div>
+            
+            <div class="agent-content">
+                <div class="agent-image">
+                    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80" alt="Avatar de Marca Personal">
+                </div>
+                
+                <div class="agent-info">
+                    <div class="features-section">
+                        <h2>Características Principales</h2>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <h3>Personalización Completa</h3>
+                                <p>Diseña un avatar que refleje tu imagen, voz y estilo de comunicación único.</p>
+                            </div>
+                            <div class="feature-card">
+                                <h3>Interacción 24/7</h3>
+                                <p>Atiende a tu audiencia en cualquier momento, sin limitaciones de horario.</p>
+                            </div>
+                            <div class="feature-card">
+                                <h3>Aprendizaje Continuo</h3>
+                                <p>Mejora constantemente su forma de interactuar basándose en tus preferencias.</p>
+                            </div>
+                            <div class="feature-card">
+                                <h3>Multicanal</h3>
+                                <p>Disponible en redes sociales, sitio web, email y plataformas de mensajería.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="use-cases">
+                <h2>¿Cómo puede ayudarte tu Avatar Digital?</h2>
+                <ul>
+                    <li><strong>Atender consultas frecuentes</strong> de clientes y seguidores</li>
+                    <li><strong>Dar la bienvenida</strong> a nuevos clientes o seguidores</li>
+                    <li><strong>Promocionar productos/servicios</strong> de forma personalizada</li>
+                    <li><strong>Recoger feedback</strong> de tu audiencia</li>
+                    <li><strong>Generar leads calificados</strong> mediante interacciones inteligentes</li>
+                    <li><strong>Mantener engagement</strong> con tu comunidad</li>
+                    <li><strong>Representarte en eventos virtuales</strong> cuando no puedas asistir</li>
+                </ul>
+            </div>
+            
+            <div class="use-cases">
+                <h2>Tecnología Avanzada</h2>
+                <ul>
+                    <li>Generación de voz idéntica a la tuya mediante IA</li>
+                    <li>Movimientos faciales y corporales naturales</li>
+                    <li>Comprensión del contexto emocional de las conversaciones</li>
+                    <li>Integración con tus conocimientos y materiales existentes</li>
+                    <li>Actualizaciones en tiempo real según tus últimas publicaciones</li>
+                </ul>
+            </div>
+            
+            <div class="demo-video">
+                <iframe src="https://www.youtube.com/embed/ejemplo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            
+            <center>
+                <a href="index.html" class="back-button">Volver a la página principal</a>
+            </center>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Kryptoryn AI</h3>
+                    <p>Revolucionando la interacción digital con avatares inteligentes.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-envelope"></i> kryptoryn@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 987-6543</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Kryptoryn AI. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
